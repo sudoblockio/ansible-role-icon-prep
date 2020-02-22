@@ -1,0 +1,12 @@
+version: 2
+
+jobs:
+  test:
+    docker:
+      - image: insight-infrastructure/terragrunt-aws-ci:v0.5.1
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          description: Molecule tests
+          command: molecule test

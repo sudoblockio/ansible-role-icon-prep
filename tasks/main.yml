@@ -1,0 +1,91 @@
+---
+
+- name: create icon group
+  group:
+    name: icon
+    state: present
+
+- name: add icon user
+  user:
+    name: icon
+    group: icon
+    append: yes
+
+- name: Include debian installs
+  include_tasks: debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Add user to docker group
+  user:
+    name: icon
+    groups: docker
+    append: yes
+
+- name: Install pip3 packages
+  pip:
+    name: "{{ pippkgs }}"
+    executable: pip3
+    state: present
+  vars:
+    pippkgs:
+      - pip
+      - docker
+      - docker-compose
+      - PyYAML
+
+- name: Create data directory
+  file:
+    path: /home/icon/data
+    mode: '0755'
+    state: directory
+    owner: icon
+    group: icon
+
+- name: Create cert directory
+  file:
+    path: /home/icon/cert
+    mode: '0755'
+    state: directory
+    owner: icon
+    group: icon
+
+- name: Copy over the keystore
+  copy:
+    src: "{{ keystore_path }}"
+    dest: /home/icon/cert/{{ keystore_path | basename }}
+    mode: '0600'
+    owner: icon
+    group: icon
+
+- name: Copy over nginx
+  synchronize:
+    src: "{{ role_path }}/files/app-block42/nginx"
+    dest: /home/icon/
+  when: app_type == 'block42'
+
+- name: Render the docker-compose file
+  template:
+    src: "{{ role_path }}/templates/docker-compose.yml.j2"
+    dest: /home/icon/docker-compose.yml
+    mode: '0600'
+    owner: icon
+    group: icon
+  when: app_type == 'block42'
+
+- name: Copy service
+  template:
+    src: "{{ role_path }}/templates/prep.service.j2"
+    dest: /etc/systemd/system/prep.service
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Enable docker service
+  systemd:
+    name: docker
+    enabled: yes
+    masked: no
+
+- name: sync the application
+  include_tasks: sync.yml
+  when: sync_db | bool

@@ -1,0 +1,4 @@
+---
+network_name: "mainnet"
+app_type: block42
+sync_db: true

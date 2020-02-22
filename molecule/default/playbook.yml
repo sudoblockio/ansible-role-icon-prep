@@ -1,0 +1,26 @@
+# Prepare things only necessary in Ubuntu Docker-in-Docker scenario
+- name: Prepare
+  hosts: all
+  pre_tasks:
+  - name: install gpg package
+    apt:
+      pkg: gpg
+      state: latest
+      update_cache: true
+    become: true
+
+  - name: create /etc/docker
+    file:
+      state: directory
+      path: /etc/docker
+
+  - name: set storage-driver to overlay2 via daemon.json
+    copy:
+      content: |
+        {
+          "storage-driver": "vfs"
+        }
+      dest: /etc/docker/daemon.json
+
+  roles:
+    - ansible-icon-prep-role

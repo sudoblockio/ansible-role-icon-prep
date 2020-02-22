@@ -1,0 +1,51 @@
+version: '3'
+services:
+     nginx:
+          depends_on:
+               - prep
+          image: 'nginx:1.17.3'
+          container_name: 'nginx'
+          volumes:
+               - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+               - ./nginx/access_lists/:/etc/nginx/access_lists/
+               - ./nginx/log/:/var/log/nginx/
+          ports:
+               - 9000:9000
+               - 7100:7100
+          external_links:
+               - prep
+          restart: always
+
+     prep:
+          image: {% if network_name == 'mainnet' %} "iconloop/prep-node" {% elif network_name == 'testnet'%} "iconloop/prep-node:2001091813x7eba36-dev" {% endif %}
+
+          container_name: 'prep-{{ network_name }}'
+          environment: {% if network_name == 'mainnet' %}
+
+               NETWORK_ENV: "mainnet"
+               CERT_PATH: "/cert"
+               LOOPCHAIN_LOG_LEVEL: "DEBUG"
+               ICON_LOG_LEVEL: "DEBUG"
+               FASTEST_START: "yes"{% elif network_name == 'testnet' %}
+
+               NETWORK_ENV: "PREP-TestNet"
+               CERT_PATH: "/cert"
+               SWITCH_BH_VERSION4: 1587271
+               CREP_ROOT_HASH: "0x9718f5d6d6ddb77f547ecc7113c8f1bad1bf46220512fbde356eee74a90ba47c"
+               LOOPCHAIN_LOG_LEVEL: "DEBUG"
+               ICON_LOG_LEVEL: "DEBUG"
+               FASTEST_START: "yes"{% endif %}
+
+               PRIVATE_KEY_FILENAME: "{{ keystore_path | basename }}"
+               PRIVATE_PASSWORD: "{{ keystore_password }}"
+               {% if citizen_ip is defined %}ENDPOINT_URL: "{{ ("http://" + citizen_ip + ":9000") }}"{% endif %}
+
+          cap_add:
+               - SYS_TIME
+          volumes:
+               - ./data:/data
+               - ./cert:/cert
+          expose:
+               - '9000'
+               - '7100'
+          restart: on-failure
