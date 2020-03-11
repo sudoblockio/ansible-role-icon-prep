@@ -1,0 +1,19 @@
+---
+
+- name: Make blackbox dir
+  file:
+    path: /home/icon/config-blackbox
+    state: directory
+    owner: icon
+    group: icon
+
+
+- name: Copy blackbox exporter config
+  template:
+    src: "{{ role_path }}/templates/config.yml.blackbox.j2"
+    dest: /home/icon/config-blackbox/config.yml
+    owner: icon
+    group: icon
+    mode: 0644
+  when: blackbox_exporter_enabled
+

@@ -4,6 +4,8 @@ galaxy_info:
   description: Role to bootstrap P-Rep node for the ICON Blockchain
   company: insight-icon
 
+  role_name: icon-prep
+
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
   # issue_tracker_url: http://example.com/issue/tracker

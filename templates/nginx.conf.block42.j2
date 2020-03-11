@@ -33,6 +33,12 @@ http {
     # Apply throtteling
     limit_req zone=LimitZoneAPI burst=50 delay=10;
 
+{% if nginx_exporter_enabled %}
+    location /metrics {
+      stub_status on;
+    }
+{% endif %}
+
     location / {
       # Apply blacklist
       include /etc/nginx/access_lists/api_blacklist.conf;
@@ -68,6 +74,12 @@ stream {
 
     # Apply throtteling
     limit_conn LimitZoneGRPC 100;
+
+{% if nginx_exporter_enabled %}
+    location /metrics {
+      stub_status on;
+    }
+{% endif %}
 
     # Apply whitelist
     #include /etc/nginx/access_lists/grpc_whitelist.conf;

@@ -1,4 +1,12 @@
 ---
 network_name: "mainnet"
-app_type: block42
+
+reverse_proxy_type: nginx
+nginx_type: block42
+
 sync_db: true
+
+
+node_exporter_enabled: true
+nginx_exporter_enabled: true
+blackbox_exporter_enabled: true

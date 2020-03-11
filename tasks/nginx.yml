@@ -1,0 +1,25 @@
+---
+
+- name: Make nginx dir
+  file:
+    path: /home/icon/nginx
+    state: directory
+    owner: icon
+    group: icon
+
+
+- name: Render nginx.conf
+  template:
+    src: "{{ role_path }}/templates/nginx.conf.block42.j2"
+    dest: /home/icon/nginx/nginx.conf
+    mode: '0600'
+    owner: icon
+    group: icon
+  when: nginx_type == 'block42'
+
+- name: Copy over nginx whitelist
+  synchronize:
+    src: "{{ role_path }}/files/nginx/access_lists"
+    dest: /home/icon/
+  when: nginx_type == 'block42'
+
