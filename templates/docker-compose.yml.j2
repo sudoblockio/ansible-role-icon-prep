@@ -61,6 +61,8 @@ services:
     image: bitnami/node-exporter:latest
     ports:
     - 9100:9100
+  restart: always
+
 
 {% endif %}
 
@@ -73,6 +75,7 @@ services:
     ports:
       - 9113:9113
     command: -nginx.scrape-uri http://localhost:9000/stub_status
+    restart: always
 
   nginx-exporter-grpc:
     image: bitnami/nginx-exporter:latest
@@ -81,6 +84,7 @@ services:
     ports:
     - 9114:9114
     command: -nginx.scrape-uri http://localhost:7100/stub_status -web.listen-address 9114
+    restart: always
 
 {% endif %}
 
@@ -95,7 +99,8 @@ services:
       - 9115:9115
     volumes:
       - ./config-blackbox:/opt/bitnami/blackbox-exporter/conf
-#    command: --config.file=/config/blackbox.yml
+    restart: always
+    # command: --config.file=/config/blackbox.yml
 
 {% endif %}
 

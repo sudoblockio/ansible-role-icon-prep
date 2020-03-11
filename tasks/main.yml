@@ -1,22 +1,22 @@
 ---
 
-#- name: Create icon group
-#  group:
-#    name: icon
-#    state: present
-#
-#- name: Add icon user
-#  user:
-#    name: icon
-#    group: icon
-#    append: yes
-#
-#- name: Include debian installs
-#  include_tasks: debian.yml
-#  when: ansible_os_family == 'Debian'
-#
-#- name: Common tasks
-#  include_tasks: common.yml
+- name: Create icon group
+  group:
+    name: icon
+    state: present
+
+- name: Add icon user
+  user:
+    name: icon
+    group: icon
+    append: yes
+
+- name: Include debian installs
+  include_tasks: debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Common tasks
+  include_tasks: common.yml
 
 - name: Include nginx conf files
   include_tasks: nginx.yml
