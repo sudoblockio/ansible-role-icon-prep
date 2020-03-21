@@ -16,7 +16,6 @@ services:
     ports:
       - 9000:9000
       - 7100:7100
-      - 8888:8888
     external_links:
       - prep
     restart: always
@@ -77,33 +76,6 @@ services:
       - prep
 {% endif %}
 
-{% if nginx_exporter_enabled %}
-
-  nginx-exporter-jsonrpc:
-    image: bitnami/nginx-exporter:latest
-    ports:
-      - 9113:9113
-{#    command: -nginx.scrape-uri http://localhost:9000/stub_status#}
-    restart: always
-    depends_on:
-      - prep
-    entrypoint:
-    - /usr/bin/exporter
-    - -nginx.scrape-uri
-    - http://demo.nginx.com/stub_status
-
-{#  nginx-exporter-grpc:#}
-{#    image: bitnami/nginx-exporter:latest#}
-{#    ports:#}
-{#    - 9114:9114#}
-{#    command: -nginx.scrape-uri http://localhost:7100/stub_status -web.listen-address 9114#}
-{#    restart: always#}
-{#    depends_on:#}
-{#      - prep#}
-
-{% endif %}
-
-
 {% if blackbox_exporter_enabled %}
 
   blackbox-exporter:
@@ -118,7 +90,6 @@ services:
       - prep
 
 {% endif %}
-
 {% if cadvisor_enabled %}
 
   cadvisor:
@@ -141,4 +112,3 @@ services:
 
 {% endif %}
 
-{#docker run --rm -d -p 9115:9115 --name blackbox_exporter -v `pwd`:/config prom/blackbox-exporter:master --config.file=/config/blackbox.yml#}

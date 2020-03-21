@@ -33,15 +33,6 @@ http {
     # Apply throtteling
     limit_req zone=LimitZoneAPI burst=50 delay=10;
 
-{% if nginx_exporter_enabled %}
-    location /metrics {
-      access_log   off;
-      allow 127.0.0.1;
-      deny all;
-      stub_status on;
-    }
-{% endif %}
-
     location / {
       # Apply blacklist
       include /etc/nginx/access_lists/api_blacklist.conf;
@@ -58,15 +49,6 @@ http {
       proxy_set_header Connection "upgrade";
     }
   }
-{#{% if nginx_exporter_enabled %}#}
-{#  server {#}
-{#    listen 9000;#}
-{#  #}
-{#    location /metrics {#}
-{#      stub_status on;#}
-{#    }#}
-{#  }#}
-{#{% endif %}#}
 }
 
 stream {
