@@ -96,6 +96,7 @@ services:
     image: bitnami/nginx-exporter:latest
     ports:
       - 9113:9113
+    network_mode: host
     restart: always
     depends_on:
       - prep

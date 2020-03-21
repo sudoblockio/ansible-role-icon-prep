@@ -29,7 +29,7 @@
 - name: Create cert directory
   file:
     path: /home/icon/cert
-    mode: '0755'
+    mode: '0600'
     state: directory
     owner: icon
     group: icon
@@ -46,9 +46,10 @@
   template:
     src: "{{ role_path }}/templates/docker-compose.yml.j2"
     dest: /home/icon/docker-compose.yml
-    mode: '0600'
+    mode: '0644'
     owner: icon
     group: icon
+  tags: update-configs
 
 - name: Copy service
   template:

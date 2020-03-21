@@ -15,10 +15,12 @@
     owner: icon
     group: icon
   when: nginx_type == 'block42'
+  tags: update-configs
 
 - name: Copy over nginx whitelist
   synchronize:
     src: "{{ role_path }}/files/nginx/access_lists"
     dest: /home/icon/nginx
   when: nginx_type == 'block42'
+  tags: update-configs
 

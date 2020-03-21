@@ -37,8 +37,8 @@ http {
     location /metrics {
       access_log   off;
       allow 127.0.0.1;
-      deny all;
       stub_status on;
+{#      deny all;#}
     }
 {% endif %}
 

@@ -17,10 +17,14 @@
 
 - name: Common tasks
   include_tasks: common.yml
+  tags:
+    - update-configs
 
 - name: Include nginx conf files
   include_tasks: nginx.yml
   when: reverse_proxy_type == 'nginx'
+  tags:
+    - update-configs
 
 - name: Enable docker service
   systemd:
