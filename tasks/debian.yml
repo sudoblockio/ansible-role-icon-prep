@@ -48,7 +48,7 @@
       - jq
       - rsync
 
-- name: "Install required packages (Ubuntu only)"
+- name: Install required packages (Ubuntu only)
   apt:
     name: "{{ packages }}"
     force_apt_get: yes
@@ -65,3 +65,91 @@
     state: touch
     owner: root
     group: root
+
+# Credit fgimenez
+- name: install ufw
+  apt:
+    name: ufw
+    state: present
+    update_cache: yes
+
+- name: ufw already enabled
+  command: ufw status verbose
+  register: ufw_status_result
+  changed_when: False
+
+#
+# Standard ports
+#
+- name: open ssh port
+  command: ufw allow 22/tcp
+  when: not ufw_status_result.stdout is search("22/tcp.*ALLOW IN.*Anywhere")
+
+- name: open grpc port
+  command: ufw allow 7100/tcp
+  when: not ufw_status_result.stdout is search("7100/tcp.*ALLOW IN.*Anywhere")
+
+- name: open jsonrpc port
+  command: ufw allow 9000/tcp
+  when: not ufw_status_result.stdout is search("9000/tcp.*ALLOW IN.*Anywhere")
+
+#
+# Exporters
+#
+# node
+- name: open node_exporter port
+  command: ufw allow 9100/tcp
+  when:
+    - node_exporter_enabled|default(false)|bool
+    - not ufw_status_result.stdout is search("9100/tcp.*ALLOW IN.*Anywhere")
+
+# nginx - jsonrpc
+- name: open nginx_exporter jsonrpc port
+  command: ufw allow 9113/tcp
+  when:
+    - nginx_exporter_enabled|default(false)|bool
+    - not ufw_status_result.stdout is search("9113/tcp.*ALLOW IN.*Anywhere")
+    - reverse_proxy_type == 'nginx'
+
+# nginx - grpc
+#- name: open nginx_exporter grpc port
+#  command: ufw allow 9114/tcp
+#  when:
+#    - nginx_exporter_enabled|default(false)|bool
+#    - not ufw_status_result.stdout is search("9114/tcp.*ALLOW IN.*Anywhere")
+#    - reverse_proxy_type == 'nginx'
+
+# blackbox
+- name: open blackbox_exporter port
+  command: ufw allow 9115/tcp
+  when:
+    - blackbox_exporter_enabled|default(false)|bool
+    - not ufw_status_result.stdout is search("9115/tcp.*ALLOW IN.*Anywhere")
+
+# blackbox
+- name: open cadvisor port
+  command: ufw allow 9115/tcp
+  when:
+    - blackbox_exporter_enabled|default(false)|bool
+    - not ufw_status_result.stdout is search("9115/tcp.*ALLOW IN.*Anywhere")
+
+- name: enable firewall
+  shell: |
+    set -o pipefail
+    echo "y" | ufw enable
+  args:
+    executable: /bin/bash
+  when: not ufw_status_result.stdout is search("Status.* active")
+
+- name: copy journald config
+  copy:
+    src: journald.conf
+    dest: /etc/systemd/journald.conf
+
+- name: restart journald
+  systemd:
+    name: systemd-journald
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  changed_when: false
