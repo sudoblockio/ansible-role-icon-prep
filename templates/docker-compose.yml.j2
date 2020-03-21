@@ -90,6 +90,21 @@ services:
       - prep
 
 {% endif %}
+{% if nginx_exporter_enabled %}
+
+  nginx-exporter-jsonrpc:
+    image: bitnami/nginx-exporter:latest
+    ports:
+      - 9113:9113
+    restart: always
+    depends_on:
+      - prep
+    entrypoint:
+    - /usr/bin/exporter
+    - -nginx.scrape-uri
+    - http://localhost:9000/metrics
+
+{% endif %}
 {% if cadvisor_enabled %}
 
   cadvisor:
