@@ -34,3 +34,5 @@
 - name: Include sync the application
   include_tasks: sync.yml
   when: sync_db | bool
+  tags:
+    - service-start
