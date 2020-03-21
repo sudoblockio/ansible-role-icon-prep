@@ -1,4 +1,5 @@
 ---
 
 - name: systemctl daemon-reload
-  command: sudo systemctl daemon-reload
+  command: systemctl daemon-reload
+  become: true

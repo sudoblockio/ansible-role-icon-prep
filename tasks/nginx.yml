@@ -7,7 +7,6 @@
     owner: icon
     group: icon
 
-
 - name: Render nginx.conf
   template:
     src: "{{ role_path }}/templates/nginx.conf.block42.j2"
@@ -20,6 +19,6 @@
 - name: Copy over nginx whitelist
   synchronize:
     src: "{{ role_path }}/files/nginx/access_lists"
-    dest: /home/icon/
+    dest: /home/icon/nginx
   when: nginx_type == 'block42'
 

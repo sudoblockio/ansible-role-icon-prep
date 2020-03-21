@@ -35,6 +35,9 @@ http {
 
 {% if nginx_exporter_enabled %}
     location /metrics {
+      access_log   off;
+      allow 127.0.0.1;
+      deny all;
       stub_status on;
     }
 {% endif %}
@@ -55,6 +58,15 @@ http {
       proxy_set_header Connection "upgrade";
     }
   }
+{#{% if nginx_exporter_enabled %}#}
+{#  server {#}
+{#    listen 9000;#}
+{#  #}
+{#    location /metrics {#}
+{#      stub_status on;#}
+{#    }#}
+{#  }#}
+{#{% endif %}#}
 }
 
 stream {
@@ -75,12 +87,6 @@ stream {
     # Apply throtteling
     limit_conn LimitZoneGRPC 100;
 
-{% if nginx_exporter_enabled %}
-    location /metrics {
-      stub_status on;
-    }
-{% endif %}
-
     # Apply whitelist
     #include /etc/nginx/access_lists/grpc_whitelist.conf;
     #deny all;
@@ -88,4 +94,5 @@ stream {
     # Forward traffic
     proxy_pass prep-grpc;
   }
+
 }

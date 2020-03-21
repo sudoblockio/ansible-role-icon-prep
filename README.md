@@ -12,16 +12,23 @@ Role Variables
 --------------
 
 Defaults:
-```
+```yml
 network_name: "mainnet"
-app_type: block42
+reverse_proxy_type: nginx
+nginx_type: block42
 sync_db: true
+data_dir: "{% if network_name == 'mainnet' %}icon{% else %}PREP-TestNet{% endif %}"
+
+node_exporter_enabled: true
+nginx_exporter_enabled: true
+blackbox_exporter_enabled: true
+cadvisor_enabled: true
+
+node_exporter_port: 9100
+nginx_exporter_port: 9113
+blackbox_exporter_port: 9115
+cadvisor_port: 8080
 ```
-
-Dependencies
-------------
-
--  cloudalchemy.ansible-node-exporter
 
 Example Playbook
 ----------------

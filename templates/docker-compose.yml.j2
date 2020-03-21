@@ -12,9 +12,11 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/access_lists/:/etc/nginx/access_lists/
       - ./nginx/log/:/var/log/nginx/
+
     ports:
       - 9000:9000
       - 7100:7100
+      - 8888:8888
     external_links:
       - prep
     restart: always
@@ -60,31 +62,44 @@ services:
   node-exporter:
     image: bitnami/node-exporter:latest
     ports:
-    - 9100:9100
-  restart: always
-
-
+      - 9100:9100
+    restart: always
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    depends_on:
+      - prep
 {% endif %}
 
 {% if nginx_exporter_enabled %}
 
   nginx-exporter-jsonrpc:
     image: bitnami/nginx-exporter:latest
-    depends_on:
-    - prep
     ports:
       - 9113:9113
-    command: -nginx.scrape-uri http://localhost:9000/stub_status
+{#    command: -nginx.scrape-uri http://localhost:9000/stub_status#}
     restart: always
-
-  nginx-exporter-grpc:
-    image: bitnami/nginx-exporter:latest
     depends_on:
-    - prep
-    ports:
-    - 9114:9114
-    command: -nginx.scrape-uri http://localhost:7100/stub_status -web.listen-address 9114
-    restart: always
+      - prep
+    entrypoint:
+    - /usr/bin/exporter
+    - -nginx.scrape-uri
+    - http://demo.nginx.com/stub_status
+
+{#  nginx-exporter-grpc:#}
+{#    image: bitnami/nginx-exporter:latest#}
+{#    ports:#}
+{#    - 9114:9114#}
+{#    command: -nginx.scrape-uri http://localhost:7100/stub_status -web.listen-address 9114#}
+{#    restart: always#}
+{#    depends_on:#}
+{#      - prep#}
 
 {% endif %}
 
@@ -93,14 +108,36 @@ services:
 
   blackbox-exporter:
     image: bitnami/blackbox-exporter:latest
-    depends_on:
-    - prep
     ports:
       - 9115:9115
     volumes:
       - ./config-blackbox:/opt/bitnami/blackbox-exporter/conf
     restart: always
     # command: --config.file=/config/blackbox.yml
+    depends_on:
+      - prep
+
+{% endif %}
+
+{% if cadvisor_enabled %}
+
+  cadvisor:
+    image: google/cadvisor:latest
+    privileged: true
+    stdin_open: true
+
+    container_name: cadvisor
+    ports:
+    - 8080:8080/tcp
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: "--enable_load_reader=true"
+    depends_on:
+      - prep
 
 {% endif %}
 
