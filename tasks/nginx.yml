@@ -7,6 +7,19 @@
     owner: icon
     group: icon
 
+- name: Make nginx log dir on data volume
+  file:
+    path: /home/icon/data/log
+    state: directory
+    owner: icon
+    group: icon
+
+- name: link nginx logs to data dir
+  file:
+    src: /home/icon/data/log
+    dest: /home/icon/nginx/log
+    state: link
+
 - name: Render nginx.conf
   template:
     src: "{{ role_path }}/templates/nginx.conf.block42.j2"
@@ -23,4 +36,3 @@
     dest: /home/icon/nginx
   when: nginx_type == 'block42'
   tags: update-configs
-
