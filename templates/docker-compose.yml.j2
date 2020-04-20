@@ -23,7 +23,7 @@ services:
 {% endif %}
 
   prep:
-    image: {% if network_name == 'mainnet' %} "iconloop/prep-node" {% elif network_name == 'testnet'%} "iconloop/prep-node:2001091813x7eba36-dev" {% endif %}
+    image: {% if network_name == 'mainnet' %} "iconloop/prep-node" {% elif network_name == 'testnet'%} "iconloop/prep-node:2004011830xf66922-dev" {% endif %}
 
     container_name: 'prep-{{ network_name }}'
     environment: {% if network_name == 'mainnet' %}
