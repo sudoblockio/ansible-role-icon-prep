@@ -87,7 +87,9 @@
 
 - name: open grpc port
   command: ufw allow 7100/tcp
-  when: not ufw_status_result.stdout is search("7100/tcp.*ALLOW IN.*Anywhere")
+  when:
+   - not ufw_status_result.stdout is search("7100/tcp.*ALLOW IN.*Anywhere")
+   - not node_type == 'citizen'
 
 - name: open jsonrpc port
   command: ufw allow 9000/tcp

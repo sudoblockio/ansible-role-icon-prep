@@ -1,31 +1,5 @@
 ---
 
-- name: Add user to docker group
-  user:
-    name: icon
-    groups: docker
-    append: yes
-
-- name: Install pip3 packages
-  pip:
-    name: "{{ pippkgs }}"
-    executable: pip3
-    state: present
-  vars:
-    pippkgs:
-      - pip
-      - docker
-      - docker-compose
-      - PyYAML
-
-- name: Create data directory
-  file:
-    path: /home/icon/data
-    mode: '0755'
-    state: directory
-    owner: icon
-    group: icon
-
 - name: Create cert directory
   file:
     path: /home/icon/cert
