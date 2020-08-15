@@ -3,7 +3,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: insight-infrastructure/terragrunt-aws-ci:v0.5.1
+      - image: insightinfrastructure/icon-ci:v0.5.0
     steps:
       - checkout
       - setup_remote_docker
