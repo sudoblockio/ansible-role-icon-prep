@@ -38,9 +38,9 @@
     state: stopped
 
 # TODO: fix logic for grabbing ip
-- name: Move db files to new IP address
-  command: mv db_{{ dhcp_ip }}:7100_icon_dex db_{{ main_ip }}:7100_icon_dex
-  become: yes
-  when: main_ip is defined and dhcp_ip | default(0.0.0.0) != main_ip
-  args:
-    chdir: "/home/icon/data/{{ data_dir }}/.storage"
+#- name: Move db files to new IP address
+#  command: mv db_{{ dhcp_ip }}:7100_icon_dex db_{{ main_ip }}:7100_icon_dex
+#  become: yes
+#  when: main_ip is defined and dhcp_ip | default(0.0.0.0) != main_ip
+#  args:
+#    chdir: "/home/icon/data/{{ data_dir }}/.storage"
