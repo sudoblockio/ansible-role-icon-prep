@@ -1,0 +1,10 @@
+---
+
+- name: Set image update cron
+  cron:
+    name: "update-icon-image"
+    minute: "0"
+    weekday: "2"
+    hour: "5"
+    job: systemctl restart prep
+  when: enable_update_cron | bool

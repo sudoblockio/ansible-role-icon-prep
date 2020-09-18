@@ -66,3 +66,6 @@
   when: sync_db | bool
   tags:
     - service-start
+
+- name: Configure cron jobs
+  include_tasks: cron.yml

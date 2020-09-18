@@ -7,6 +7,8 @@ nginx_type: block42
 
 sync_db: true
 
+enable_update_cron: false
+
 data_dir: "{% if network_name == 'mainnet' %}icon{% else %}PREP-TestNet{% endif %}"
 
 node_exporter_enabled: true
@@ -18,3 +20,4 @@ node_exporter_port: 9100
 nginx_exporter_port: 9113
 blackbox_exporter_port: 9115
 cadvisor_port: 8080
+
