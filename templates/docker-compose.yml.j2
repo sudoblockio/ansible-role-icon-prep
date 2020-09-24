@@ -23,25 +23,22 @@ services:
 {% endif %}
 
   prep:
-    image: {% if network_name == 'mainnet' %} "iconloop/prep-node" {% elif network_name == 'testnet'%} "iconloop/prep-node:2004011830xf66922-dev" {% endif %}
+    image: {{ image }}
 
     container_name: 'prep-{{ network_name }}'
     environment: {% if network_name == 'mainnet' %}
 
       NETWORK_ENV: "mainnet"
-      CERT_PATH: "/cert"
-      LOOPCHAIN_LOG_LEVEL: "DEBUG"
-      ICON_LOG_LEVEL: "DEBUG"
-      FASTEST_START: "yes"{% elif network_name == 'testnet' %}
+      {% elif network_name == 'zicon' %}
 
       NETWORK_ENV: "PREP-TestNet"
-      CERT_PATH: "/cert"
       SWITCH_BH_VERSION4: 1587271
-      CREP_ROOT_HASH: "0x9718f5d6d6ddb77f547ecc7113c8f1bad1bf46220512fbde356eee74a90ba47c"
+      CREP_ROOT_HASH: "0x9718f5d6d6ddb77f547ecc7113c8f1bad1bf46220512fbde356eee74a90ba47c"{% endif %}
+
       LOOPCHAIN_LOG_LEVEL: "DEBUG"
       ICON_LOG_LEVEL: "DEBUG"
-      FASTEST_START: "yes"{% endif %}
-
+      FASTEST_START: "yes"
+      CERT_PATH: "/cert"
       PRIVATE_KEY_FILENAME: "{{ keystore_path | basename }}"
       PRIVATE_PASSWORD: "{{ keystore_password }}"
       {% if citizen_ip is defined %}ENDPOINT_URL: "{{ ("http://" + citizen_ip + ":9000") }}"{% endif %}

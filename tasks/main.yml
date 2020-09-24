@@ -42,7 +42,7 @@
     group: icon
 
 - name: Common tasks
-  include_tasks: common.yml
+  include_tasks: prep.yml
   tags:
     - update-configs
 

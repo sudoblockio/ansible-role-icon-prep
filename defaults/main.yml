@@ -9,7 +9,20 @@ sync_db: true
 
 enable_update_cron: false
 
-data_dir: "{% if network_name == 'mainnet' %}icon{% else %}PREP-TestNet{% endif %}"
+image_map:
+  mainnet: "iconloop/prep-node"
+  zicon: "iconloop/prep-node:dev"
+  bicon: ""
+  testnet: ""
+
+data_dir_map:
+  mainnet: "mainnet"
+  zicon: "PREP-TestNet"
+  bicon: ""
+  testnet: ""
+
+data_dir: "{{ data_dir_map[network_name] }}"
+image: "{{ image_map[network_name] }}"
 
 node_exporter_enabled: true
 nginx_exporter_enabled: true
