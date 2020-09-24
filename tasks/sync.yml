@@ -22,25 +22,17 @@
   tags:
     - service-start
 
-- name: Wait on node for application to come up and sync
-  script: "{{ role_path }}/files/wait-for-sync.sh"
-  tags:
-    - service-start
+- name: Put sync script on host
+  template:
+    src: "{{ role_path }}/templates/wait-for-sync.sh"
+    dest: /home/icon/wait-for-sync.sh
+    owner: icon
+    group: icon
+    mode: 0644
 
-#- name: Stop node application via docker-compose
-#  docker_compose:
-#    project_src: /home/icon
-#    stopped: yes
+- name: Changing perm of "/home/icon/wait-for-sync.sh", adding "+x"
+  file: dest=/home/icon/wait-for-sync.sh mode=a+x
 
-- name: Stop prep service to release lock on db before IP change
-  service:
-    name: prep
-    state: stopped
-
-# TODO: fix logic for grabbing ip
-#- name: Move db files to new IP address
-#  command: mv db_{{ dhcp_ip }}:7100_icon_dex db_{{ main_ip }}:7100_icon_dex
-#  become: yes
-#  when: main_ip is defined and dhcp_ip | default(0.0.0.0) != main_ip
-#  args:
-#    chdir: "/home/icon/data/{{ data_dir }}/.storage"
+- name: Run final sync and tx
+  shell: cd /home/icon; nohup wait-for-sync.sh > wait-for-sync.log &
+  become: true
