@@ -16,10 +16,48 @@
     owner: icon
     group: icon
 
-- name: Render the docker-compose file
-  template:
-    src: "{{ role_path }}/templates/docker-compose.yml.j2"
+#- name: Render the docker-compose file
+#  template:
+#    src: "{{ role_path }}/templates/docker-compose.yml.j2"
+#    dest: /home/icon/docker-compose.yml
+#    mode: '0644'
+#    owner: icon
+#    group: icon
+#  tags: update-configs
+#
+#- name: Render the docker-compose override file
+#  template:
+#    src: "{{ role_path }}/templates/docker-compose.yml.j2"
+#    dest: /home/icon/docker-compose.yml
+#    mode: '0644'
+#    owner: icon
+#    group: icon
+#  tags: update-configs
+#  when: docker_override_enable | bool
+
+- name: Copy the docker-compose file
+  copy:
+    src: docker-compose.yml
     dest: /home/icon/docker-compose.yml
+    mode: '0644'
+    owner: icon
+    group: icon
+  tags: update-configs
+
+- name: Copy the docker-compose override file
+  copy:
+    src: docker-compose.min.override.yml
+    dest: /home/icon/docker-compose.override.yml
+    mode: '0644'
+    owner: icon
+    group: icon
+  tags: update-configs
+  when: docker_override_enable | bool
+
+- name: Render env file
+  template:
+    src: "{{ role_path }}/templates/.env.j2"
+    dest: /home/icon/.env
     mode: '0644'
     owner: icon
     group: icon

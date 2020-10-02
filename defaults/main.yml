@@ -6,23 +6,34 @@ reverse_proxy_type: nginx
 nginx_type: block42
 
 sync_db: true
+endpoint_url: # blank for default url
 
 enable_update_cron: false
 
-image_map:
+docker_tag_map:
   mainnet: "iconloop/prep-node"
   zicon: "iconloop/prep-node:dev"
   bicon: ""
   testnet: ""
+docker_tag: "{{ docker_tag_map[network_name] }}"
 
-data_dir_map:
+#data_dir_map:
+#  mainnet: "mainnet"
+#  zicon: "PREP-TestNet"
+#  bicon: ""
+#  testnet: ""
+#data_dir: "{{ data_dir_map[network_name] }}"
+
+network_env_map:
   mainnet: "mainnet"
   zicon: "PREP-TestNet"
   bicon: ""
   testnet: ""
+network_env: "{{ network_env_map[network_name] }}"
 
-data_dir: "{{ data_dir_map[network_name] }}"
-image: "{{ image_map[network_name] }}"
+docker_override_enable: false
+
+prometheus_enable: true
 
 node_exporter_enabled: true
 nginx_exporter_enabled: true

@@ -1,5 +1,8 @@
 ---
 
+- name: Get network info
+  include_tasks: network_info.yml
+
 - name: Create icon group
   group:
     name: icon
@@ -60,6 +63,7 @@
 
 - name: Configure exporters
   include_tasks: exporters.yml
+  when: prometheus_enable | bool
 
 - name: Include sync the application
   include_tasks: sync.yml

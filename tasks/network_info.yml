@@ -1,0 +1,26 @@
+---
+
+- name: Get network details
+  uri:
+    url: https://raw.githubusercontent.com/JINWOO-J/icon_network_info/master/conf/{{ network_name }}.json
+    method: GET
+    return_content: yes
+    status_code: 200
+    body_format: json
+  register: network_details
+  retries: 10
+  delay: 30
+
+- name: docker_tag
+  set_fact:
+    docker_tag: "{{ network_details.json.docker_tag }}"
+  when: network_name != 'mainnet'
+
+- name: docker_tag
+  set_fact:
+    docker_tag: iconloop/prep-node
+  when: network_name == 'mainnet'
+
+#- name: api_endpoint
+#  set_fact:
+#    endpoint_url: "{{ network_details.json.api_endpoint }}/api/v1"

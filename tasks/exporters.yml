@@ -6,6 +6,7 @@
     state: directory
     owner: icon
     group: icon
+  when: blackbox_exporter_enabled | bool
 
 - name: Copy blackbox exporter config
   template:
@@ -14,4 +15,4 @@
     owner: icon
     group: icon
     mode: 0644
-  when: blackbox_exporter_enabled
+  when: blackbox_exporter_enabled | bool
