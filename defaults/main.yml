@@ -6,6 +6,7 @@ reverse_proxy_type: nginx
 nginx_type: block42
 
 sync_db: true
+switch_ip_internally: false
 endpoint_url: # blank for default url
 
 enable_update_cron: false

@@ -63,10 +63,10 @@
     group: icon
   tags: update-configs
 
-- name: Copy service
-  template:
-    src: "{{ role_path }}/templates/prep.service.j2"
-    dest: /etc/systemd/system/prep.service
-    owner: root
-    group: root
-    mode: 0600
+#- name: Copy service
+#  template:
+#    src: "{{ role_path }}/templates/prep.service.j2"
+#    dest: /etc/systemd/system/prep.service
+#    owner: root
+#    group: root
+#    mode: 0600

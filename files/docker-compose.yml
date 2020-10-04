@@ -24,7 +24,11 @@ services:
     container_name: prep-${NETWORK_NAME}
     environment:
 
-      NETWORK_NAME: ${NETWORK_NAME}
+      SERVICE: ${NETWORK_NAME}
+      ENDPOINT_URL: ${ENDPOINT_URL}
+      PRIVATE_KEY_FILENAME: ${PRIVATE_KEY_FILENAME}
+      PRIVATE_PASSWORD: ${PRIVATE_PASSWORD}
+      
       LOOPCHAIN_LOG_LEVEL: "DEBUG"
       ICON_LOG_LEVEL: "DEBUG"
       FASTEST_START: "yes"

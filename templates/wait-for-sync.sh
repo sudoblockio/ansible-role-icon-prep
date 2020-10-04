@@ -32,7 +32,8 @@ function associate_on_own() {
 
 function re_sync() {
   until [[ "$(curl -s http://whatismyip.akamai.com/)" == "{{ main_ip }}" ]]; do
-    systemctl restart prep
+    docker-compose down
+    docker-compose up -d
     until [[ ${array[$(curl -s localhost:9000/api/v1/status/peer | jq -r .state)]} ]]; do
       sleep 5
     done

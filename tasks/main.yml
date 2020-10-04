@@ -55,11 +55,15 @@
   tags:
     - update-configs
 
-- name: Enable docker service
-  systemd:
-    name: docker
-    enabled: yes
-    masked: no
+#- name: Enable docker service
+#  systemd:
+#    name: docker
+#    enabled: yes
+#    masked: no
+
+#- name: Start node application via docker-compose
+#  docker_compose:
+#    project_src: /home/icon
 
 - name: Configure exporters
   include_tasks: exporters.yml
