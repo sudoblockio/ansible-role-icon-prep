@@ -24,7 +24,8 @@ services:
     container_name: prep-${NETWORK_NAME}
     environment:
 
-      SERVICE: ${NETWORK_NAME}
+#      SERVICE: ${NETWORK_NAME}
+      NETWORK_ENV: ${NETWORK_ENV}
       ENDPOINT_URL: ${ENDPOINT_URL}
       PRIVATE_KEY_FILENAME: ${PRIVATE_KEY_FILENAME}
       PRIVATE_PASSWORD: ${PRIVATE_PASSWORD}
