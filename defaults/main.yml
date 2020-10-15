@@ -46,3 +46,4 @@ nginx_exporter_port: 9113
 blackbox_exporter_port: 9115
 cadvisor_port: 8080
 
+cron_updater: false

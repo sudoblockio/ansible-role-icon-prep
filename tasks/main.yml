@@ -77,3 +77,4 @@
 
 - name: Configure cron jobs
   include_tasks: cron.yml
+  when: cron_updater | bool
