@@ -1,66 +1,61 @@
 ---
 
-- name: Create cert directory
-  file:
-    path: /home/icon/cert
-    mode: '0600'
-    state: directory
-    owner: icon
-    group: icon
 
 - name: Copy over the keystore
   copy:
     src: "{{ keystore_path }}"
-    dest: /home/icon/cert/{{ keystore_path | basename }}
-    mode: '0600'
-    owner: icon
-    group: icon
+    dest: "/home/{{ admin_user }}/cert/{{ keystore_path | basename }}"
+    mode: '0644'
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
+  when:
+    - keystore_path is defined
 
 #- name: Render the docker-compose file
 #  template:
 #    src: "{{ role_path }}/templates/docker-compose.yml.j2"
-#    dest: /home/icon/docker-compose.yml
+#    dest: /home/{{ admin_user }}/docker-compose.yml
 #    mode: '0644'
-#    owner: icon
-#    group: icon
+#    owner: "{{ admin_user }}"
+#    group: "{{ admin_group }}"
 #  tags: update-configs
 #
 #- name: Render the docker-compose override file
 #  template:
 #    src: "{{ role_path }}/templates/docker-compose.yml.j2"
-#    dest: /home/icon/docker-compose.yml
+#    dest: /home/{{ admin_user }}/docker-compose.yml
 #    mode: '0644'
-#    owner: icon
-#    group: icon
+#    owner: "{{ admin_user }}"
+#    group: "{{ admin_group }}"
 #  tags: update-configs
 #  when: docker_override_enable | bool
 
 - name: Copy the docker-compose file
   copy:
     src: docker-compose.yml
-    dest: /home/icon/docker-compose.yml
+    dest: /home/{{ admin_user }}/docker-compose.yml
     mode: '0644'
-    owner: icon
-    group: icon
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
   tags: update-configs
 
 - name: Copy the docker-compose override file
   copy:
     src: docker-compose.min.override.yml
-    dest: /home/icon/docker-compose.override.yml
+    dest: /home/{{ admin_user }}/docker-compose.override.yml
     mode: '0644'
-    owner: icon
-    group: icon
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
   tags: update-configs
   when: docker_override_enable | bool
 
 - name: Render env file
   template:
     src: "{{ role_path }}/templates/.env.j2"
-    dest: /home/icon/.env
+    dest: /home/{{ admin_user }}/.env
     mode: '0644'
-    owner: icon
-    group: icon
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
   tags: update-configs
 
 #- name: Copy service

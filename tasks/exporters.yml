@@ -2,17 +2,17 @@
 
 - name: Make blackbox dir
   file:
-    path: /home/icon/config-blackbox
+    path: /home/{{ admin_user }}/config-blackbox
     state: directory
-    owner: icon
-    group: icon
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
   when: blackbox_exporter_enabled | bool
 
 - name: Copy blackbox exporter config
   template:
     src: "{{ role_path }}/templates/config.yml.blackbox.j2"
-    dest: /home/icon/config-blackbox/config.yml
-    owner: icon
-    group: icon
+    dest: /home/{{ admin_user }}/config-blackbox/config.yml
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
     mode: 0644
   when: blackbox_exporter_enabled | bool

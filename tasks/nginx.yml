@@ -2,37 +2,31 @@
 
 - name: Make nginx dir
   file:
-    path: /home/icon/nginx
+    path: /home/{{ admin_user }}/nginx
     state: directory
-    owner: icon
-    group: icon
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
 
 - name: Make nginx log dir on data volume
   file:
-    path: /home/icon/data/log
+    path: /home/{{ admin_user }}/data/log
     state: directory
-    owner: icon
-    group: icon
-
-- name: link nginx logs to data dir
-  file:
-    src: /home/icon/data/log
-    dest: /home/icon/nginx/log
-    state: link
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
 
 - name: Render nginx.conf
   template:
     src: "{{ role_path }}/templates/nginx.conf.block42.j2"
-    dest: /home/icon/nginx/nginx.conf
-    mode: '0600'
-    owner: icon
-    group: icon
+    dest: /home/{{ admin_user }}/nginx/nginx.conf
+    mode: '0644'
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
   when: nginx_type == 'block42'
   tags: update-configs
 
 - name: Copy over nginx whitelist
   synchronize:
     src: "{{ role_path }}/files/nginx/access_lists"
-    dest: /home/icon/nginx
+    dest: "/home/{{ admin_user }}/nginx"
   when: nginx_type == 'block42'
   tags: update-configs

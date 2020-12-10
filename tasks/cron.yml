@@ -6,5 +6,9 @@
     minute: "0"
     weekday: "2"
     hour: "5"
-    job: systemctl restart prep
+    job: |
+      su {{ admin_user }} && \
+      /usr/local/bin/docker-compose -f /home/{{ admin_user }}/docker-composer.yml pull &&
+      /usr/local/bin/docker-compose -f /home/{{ admin_user }}/docker-composer.yml down &&
+      /usr/local/bin/docker-compose -f /home/{{ admin_user }}/docker-composer.yml up -d
   when: enable_update_cron | bool

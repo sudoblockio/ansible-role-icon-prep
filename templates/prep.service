@@ -1,0 +1,17 @@
+[Unit]
+Description=P-Rep docker-compose.yml startup
+Requires=docker.service
+After=docker.service
+
+
+[Service]
+Type=oneshot
+User={{ admin_user }}
+Group={{ admin_group }}
+RemainAfterExit=true
+
+ExecStart=/usr/local/bin/docker-compose -f /home/{{ admin_user }}/docker-compose.yml up -d --remove-orphans
+ExecStop=/usr/local/bin/docker-compose -f /home/{{ admin_user }}/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target

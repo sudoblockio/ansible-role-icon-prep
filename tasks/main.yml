@@ -1,28 +1,12 @@
 ---
 
-- name: Get network info
-  include_tasks: network_info.yml
-
-- name: Create icon group
-  group:
-    name: icon
-    state: present
-
-- name: Add icon user
-  user:
-    name: icon
-    group: icon
-    append: yes
-
 - name: Include debian installs
   include_tasks: debian.yml
   when: ansible_os_family == 'Debian'
 
-- name: Add user to docker group
-  user:
-    name: icon
-    groups: docker
-    append: yes
+- name: Configure cron jobs
+  include_tasks: cron.yml
+  when: cron_updater | bool
 
 - name: Install pip3 packages
   pip:
@@ -33,19 +17,26 @@
     pippkgs:
       - pip
       - docker
-      - docker-compose
-      - PyYAML
 
 - name: Create data directory
   file:
-    path: /home/icon/data
+    path: "/home/{{ admin_user }}/data"
     mode: '0755'
     state: directory
-    owner: icon
-    group: icon
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
 
-- name: Common tasks
+- name: Create cert directory
+  file:
+    path: /home/{{ admin_user }}/cert
+    mode: '0600'
+    state: directory
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
+
+- name: Prep tasks
   include_tasks: prep.yml
+  when: not node_type == 'citizen'
   tags:
     - update-configs
 
@@ -55,26 +46,19 @@
   tags:
     - update-configs
 
-#- name: Enable docker service
-#  systemd:
-#    name: docker
-#    enabled: yes
-#    masked: no
-
-#- name: Start node application via docker-compose
-#  docker_compose:
-#    project_src: /home/icon
-
 - name: Configure exporters
   include_tasks: exporters.yml
   when: prometheus_enable | bool
 
-- name: Include sync the application
-  include_tasks: sync.yml
-  when: sync_db | bool
-  tags:
-    - service-start
+- name: reset ssh connection to allow user changes to affect 'current login user'
+  meta: reset_connection
 
-- name: Configure cron jobs
-  include_tasks: cron.yml
-  when: cron_updater | bool
+- name: Start node application via docker-compose
+  args:
+    chdir: "/home/{{ admin_user }}"
+  shell: docker-compose up -d
+
+- name: Wait for port 9000 to become open on the host, don't start checking for 10 seconds
+  wait_for:
+    port: 9000
+    delay: 10

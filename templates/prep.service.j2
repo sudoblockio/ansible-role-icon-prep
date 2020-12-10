@@ -6,17 +6,16 @@ After=docker.service
 [Service]
 Type=oneshot
 
-User=icon
-Group=icon
+User={{ admin_user }}
+Group={{ admin_group }}
 
 # Remove old containers, images and volumes
-ExecStartPre=/usr/local/bin/docker-compose -f /home/icon/docker-compose.yml down -v
+ExecStartPre=su /usr/local/bin/docker-compose -f /home/icon/docker-compose.yml down -v
 ExecStartPre=-/usr/local/bin/docker-compose -f /home/icon/docker-compose.yml pull
 
 RemainAfterExit=yes
 StandardError=null
 StandardOutput=null
-WorkingDirectory=/home
 
 ExecStart=/usr/local/bin/docker-compose -f /home/icon/docker-compose.yml up -d
 ExecStop=/usr/local/bin/docker-compose -f /home/icon/docker-compose.yml down
