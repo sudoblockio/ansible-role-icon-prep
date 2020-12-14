@@ -34,11 +34,11 @@
       - curl
       - jq
 
-- name: Add user to docker group
-  user:
-    name: "{{ admin_user }}"
-    groups: docker
-    append: yes
+#- name: Add user to docker group
+#  user:
+#    name: "{{ admin_user }}"
+#    groups: docker
+#    append: yes
 
 #- name: Create hard core limit file
 #  file:
