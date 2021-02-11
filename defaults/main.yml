@@ -20,7 +20,7 @@ enable_update_cron: true
 
 docker_tag_map:
   mainnet: "iconloop/prep-node"
-  zicon: "iconloop/prep-node:dev"
+  zicon: "iconloop/prep-node:2020.11.12-dev"
   bicon: ""
   testnet: ""
 docker_tag: "{{ docker_tag_map[network_name] }}"
