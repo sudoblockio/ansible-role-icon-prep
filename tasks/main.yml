@@ -34,17 +34,50 @@
     owner: "{{ admin_user }}"
     group: "{{ admin_group }}"
 
-- name: Prep tasks
-  include_tasks: prep.yml
-  when: not node_type == 'citizen'
-  tags:
-    - update-configs
+- name: Copy over the keystore
+  copy:
+    src: "{{ keystore_path }}"
+    dest: "/home/{{ admin_user }}/cert/{{ keystore_path | basename }}"
+    mode: '0644'
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
+  when:
+    - keystore_path is defined
+    - not node_type == 'citizen'
 
+#
+# Docker Configs
+#
+- name: Copy the docker-compose file
+  copy:
+    src: docker-compose.yml
+    dest: /home/{{ admin_user }}/docker-compose.yml
+    mode: '0644'
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
+
+- name: Copy the docker-compose override file
+  copy:
+    src: docker-compose.min.override.yml
+    dest: /home/{{ admin_user }}/docker-compose.override.yml
+    mode: '0644'
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
+
+- name: Render env file
+  template:
+    src: "{{ role_path }}/templates/.env.j2"
+    dest: /home/{{ admin_user }}/.env
+    mode: '0644'
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
+
+#
+# Nginx
+#
 - name: Include nginx conf files
   include_tasks: nginx.yml
   when: reverse_proxy_type == 'nginx'
-  tags:
-    - update-configs
 
 - name: Configure exporters
   include_tasks: exporters.yml
