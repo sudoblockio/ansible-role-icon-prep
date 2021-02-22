@@ -56,14 +56,6 @@
     owner: "{{ admin_user }}"
     group: "{{ admin_group }}"
 
-- name: Copy the docker-compose override file
-  copy:
-    src: docker-compose.min.override.yml
-    dest: /home/{{ admin_user }}/docker-compose.override.yml
-    mode: '0644'
-    owner: "{{ admin_user }}"
-    group: "{{ admin_group }}"
-
 - name: Render env file
   template:
     src: "{{ role_path }}/templates/.env.j2"

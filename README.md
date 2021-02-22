@@ -11,13 +11,12 @@ Requirements
 Role Variables
 --------------
 
+For a full list, check the `defaults/main.yml`.
+
 Defaults:
 ```yml
 network_name: "mainnet"
 reverse_proxy_type: nginx
-nginx_type: block42
-sync_db: true
-data_dir: "{% if network_name == 'mainnet' %}icon{% else %}PREP-TestNet{% endif %}"
 
 node_exporter_enabled: true
 nginx_exporter_enabled: true
