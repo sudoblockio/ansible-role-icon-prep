@@ -23,4 +23,4 @@
       dest: /etc/docker/daemon.json
 
   roles:
-    - icon-prep
+    - icon_prep

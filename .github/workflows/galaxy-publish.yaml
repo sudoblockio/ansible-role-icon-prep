@@ -1,0 +1,27 @@
+name: Publish to Galaxy
+
+on:
+  - push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
+      - name: molecule
+        uses: robertdebock/molecule-action@2.6.3
+        with:
+          command: lint
+
+  release:
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release Ansible Role to Galaxy
+        uses: hspaans/ansible-galaxy-action@v0.2.7
+        with:
+          api_key: ${{ secrets.ansible_galaxy_api_key }}
