@@ -30,7 +30,7 @@ services:
       
       LOOPCHAIN_LOG_LEVEL: "DEBUG"
       ICON_LOG_LEVEL: "DEBUG"
-      FASTEST_START: "yes"
+      FASTEST_START: ${FASTEST_START}
       CERT_PATH: "/cert"
       
     cap_add:

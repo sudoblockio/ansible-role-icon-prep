@@ -12,7 +12,7 @@ nginx_type: block42
 keystore_password: ""
 keystore_path: ""
 
-sync_db: true
+#sync_db: true
 switch_ip_internally: false
 endpoint_url: # blank for default url
 
@@ -24,6 +24,8 @@ docker_tag_map:
   bicon: ""
   testnet: ""
 docker_tag: "{{ docker_tag_map[network_name] }}"
+
+fastest_start: "yes"
 
 #data_dir_map:
 #  mainnet: "mainnet"
