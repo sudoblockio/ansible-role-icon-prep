@@ -56,3 +56,40 @@ blackbox_exporter_port: 9115
 cadvisor_port: 8080
 
 cron_updater: false
+
+
+# Logging
+goloop_log_forwarder_address:
+goloop_log_forwarder_level: "info"
+goloop_log_forwarder_name:
+goloop_log_forwarder_options:
+goloop_log_forwarder_vendor:
+goloop_log_level: "debug"
+goloop_log_writer_compress: "false"
+goloop_log_writer_filename:
+goloop_log_writer_localtime: "false"
+goloop_log_writer_maxage: 0
+goloop_log_writer_maxbackups: 0
+goloop_log_writer_maxsize: 100
+
+# Keys
+#goloop_key_password:
+goloop_key_plugin:
+goloop_key_plugin_options:
+goloop_key_secret:
+#goloop_key_store:
+
+# Engine
+goloop_backup_dir:
+goloop_config:
+goloop_console_level: "trace"
+goloop_ee_socket:
+goloop_engines: "python"
+goloop_node_dir: "/data"
+
+# Network
+goloop_node_sock:
+goloop_p2p:
+goloop_p2p_listen:
+goloop_rpc_addr:
+goloop_rpc_dump: "false"

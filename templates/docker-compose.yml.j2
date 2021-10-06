@@ -35,13 +35,49 @@ services:
       SWITCH_BH_VERSION4: 1587271
       CREP_ROOT_HASH: "0x9718f5d6d6ddb77f547ecc7113c8f1bad1bf46220512fbde356eee74a90ba47c"{% endif %}
 
-      LOOPCHAIN_LOG_LEVEL: "DEBUG"
-      ICON_LOG_LEVEL: "DEBUG"
+      #LOOPCHAIN_LOG_LEVEL: "DEBUG"
+      #ICON_LOG_LEVEL: "DEBUG"
       FASTEST_START: "yes"
       CERT_PATH: "/cert"
-      PRIVATE_KEY_FILENAME: "{{ keystore_path | basename }}"
-      PRIVATE_PASSWORD: "{{ keystore_password }}"
+      #PRIVATE_KEY_FILENAME: "{{ keystore_path | basename }}"
+      #PRIVATE_PASSWORD: "{{ keystore_password }}"
       {% if citizen_ip is defined %}ENDPOINT_URL: "{{ ("http://" + citizen_ip + ":9000") }}"{% endif %}
+
+      # Logging
+      GOLOOP_LOG_FORWARDER_ADDRESS: "{{ goloop_log_forwarder_address }}"
+      GOLOOP_LOG_FORWARDER_LEVEL: "{{ goloop_log_forwarder_level }}"
+      GOLOOP_LOG_FORWARDER_NAME: "{{ goloop_log_forwarder_name }}"
+      GOLOOP_LOG_FORWARDER_OPTIONS: "{{ goloop_log_forwarder_options }}"
+      GOLOOP_LOG_FORWARDER_VENDOR: "{{ goloop_log_forwarder_vendor }}"
+      GOLOOP_LOG_LEVEL: "{{ goloop_log_level }}"
+      GOLOOP_LOG_WRITER_COMPRESS: "{{ goloop_log_writer_compress }}"
+      GOLOOP_LOG_WRITER_FILENAME: "{{ goloop_log_writer_filename }}"
+      GOLOOP_LOG_WRITER_LOCALTIME: "{{ goloop_log_writer_localtime }}"
+      GOLOOP_LOG_WRITER_MAXAGE: "{{ goloop_log_writer_maxage }}"
+      GOLOOP_LOG_WRITER_MAXBACKUPS: "{{ goloop_log_writer_maxbackups }}"
+      GOLOOP_LOG_WRITER_MAXSIZE: "{{ goloop_log_writer_maxsize }}"
+
+      # Keys
+      GOLOOP_KEY_PASSWORD: "{{ keystore_password }}"
+      GOLOOP_KEY_PLUGIN: "{{ goloop_key_plugin }}"
+      GOLOOP_KEY_PLUGIN_OPTIONS: "{{ goloop_key_plugin_options }}"
+      GOLOOP_KEY_SECRET: "{{ goloop_key_secret }}"
+      GOLOOP_KEY_STORE: "{{ keystore_path | basename }}"
+
+      # Engine
+      GOLOOP_BACKUP_DIR: "{{ goloop_backup_dir }}"
+      GOLOOP_CONFIG: "{{ goloop_config }}"
+      GOLOOP_CONSOLE_LEVEL: "{{ goloop_console_level }}"
+      GOLOOP_EE_SOCKET: "{{ goloop_ee_socket }}"
+      GOLOOP_ENGINES: "{{ goloop_engines }}"
+      GOLOOP_NODE_DIR: "{{ goloop_node_dir }}"
+
+      # Network
+      GOLOOP_NODE_SOCK: "{{ goloop_node_sock }}"
+      GOLOOP_P2P: "{{ goloop_p2p }}"
+      GOLOOP_P2P_LISTEN: "{{ goloop_p2p_listen }}"
+      GOLOOP_RPC_ADDR: "{{ goloop_rpc_addr }}"
+      GOLOOP_RPC_DUMP: "{{ goloop_rpc_dump }}"
 
     cap_add:
       - SYS_TIME
