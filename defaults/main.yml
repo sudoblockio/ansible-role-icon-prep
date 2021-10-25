@@ -19,10 +19,11 @@ endpoint_url: # blank for default url
 enable_update_cron: true
 
 docker_tag_map:
-  mainnet: "iconloop/prep-node"
-  zicon: "iconloop/prep-node:2020.11.12-dev"
-  bicon: ""
-  testnet: ""
+  mainnet: "iconloop/goloop-icon:latest"
+  zicon: "iconloop/goloop-icon:latest"
+  bicon: "iconloop/goloop-icon:latest"
+  testnet: "iconloop/goloop-icon:latest"
+  sejong: "iconloop/goloop-icon:latest"
 docker_tag: "{{ docker_tag_map[network_name] }}"
 
 fastest_start: "yes"
@@ -56,3 +57,6 @@ blackbox_exporter_port: 9115
 cadvisor_port: 8080
 
 cron_updater: false
+
+goloop_version: v1.0.2
+goloop_location: "/home/{{admin_user}}/goloop"

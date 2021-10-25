@@ -1,0 +1,53 @@
+---
+#
+# Node directories
+#
+- name: Create data / mainnet directory
+  file:
+    path: "/home/{{ admin_user }}/{{ dirs }}"
+    mode: '0755'
+    state: directory
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
+  vars:
+    dirs:
+      - data
+      - mainnet
+
+- name: Create config directory
+  file:
+    path: /home/{{ admin_user }}/config
+    mode: '0600'
+    state: directory
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
+
+- name: Copy over the keystore
+  copy:
+    src: "{{ keystore_path }}"
+    dest: "/home/{{ admin_user }}/config/{{ keystore_path | basename }}"
+    mode: '0644'
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
+  when:
+    - keystore_path is defined
+    - not node_type == 'citizen'
+
+#
+# Docker configs
+#
+- name: Copy the docker-compose file
+  copy:
+    src: docker-compose.yml
+    dest: /home/{{ admin_user }}/docker-compose.yml
+    mode: '0644'
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
+
+- name: Render env file
+  template:
+    src: "{{ role_path }}/templates/.env.j2"
+    dest: /home/{{ admin_user }}/.env
+    mode: '0644'
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"

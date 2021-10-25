@@ -1,0 +1,93 @@
+version: '3.7'
+services:
+
+  nginx:
+    image: 'nginx:1.17.3'
+    container_name: 'nginx'
+    depends_on:
+      - prep
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/log/:/var/log/nginx/
+    ports:
+      - 9080:9080
+      - 8080:8080
+    external_links:
+      - prep
+    restart: always
+
+  prep:
+#    ports:
+#      - "9080:9080"
+#      - "8080:8080"
+    expose:
+      - "9080"
+      - "8080"
+
+    image: ${PREP_DOCKER_TAG:-iconloop/goloop-icon:latest}
+
+    container_name: prep-${NETWORK_NAME}
+#    environment:
+#
+#      GOLOOP_CONFIG: ""
+#      GOLOOP_KEY_STORE: ""
+#      GOLOOP_NODE_DIR: ""
+#      GOLOOP_NODE_SOCK: ""
+#
+#      KEY_STORE: ${KEY_STORE}
+#      KEY_SECRET: ${KEY_SECRET}
+
+    cap_add:
+      - SYS_TIME
+    volumes:
+      - ./data:/goloop/data
+      - ./mainnet:/mainnet
+      - ./config:/goloop/config
+    restart: on-failure
+
+  node-exporter:
+    image: bitnami/node-exporter:latest
+    ports:
+      - 9100:9100
+    restart: always
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    depends_on:
+      - prep
+
+  nginx-exporter-rpc:
+    image: bitnami/nginx-exporter:latest
+    ports:
+      - 9113:9113
+    restart: always
+    depends_on:
+      - prep
+    entrypoint:
+      - /usr/bin/exporter
+      - -nginx.scrape-uri
+      - http://nginx:9080/metrics
+
+  cadvisor:
+    image: google/cadvisor:latest
+    privileged: true
+    stdin_open: true
+
+    container_name: cadvisor
+    ports:
+      - 8081:8080/tcp
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: "--enable_load_reader=true"
+    depends_on:
+      - prep

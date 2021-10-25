@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: rob cannon
-  description: Role to bootstrap P-Rep node for the ICON Blockchain
+  description: Role to bootstrap P-Rep node for the ICON Blockchain 2.0
   company: Geometry Labs
   namespace: geometrylabs
   role_name: icon_prep

@@ -1,0 +1,62 @@
+---
+
+- name: check if running on cloud
+  stat:
+    path: /var/lib/cloud
+  register: cloud
+
+- name: Wait for updates / upgrades from user data script to release lock
+  script: wait-for-apt-on-startup.sh
+  when: cloud.stat.exists
+
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    update_cache: yes
+    upgrade: "yes" # Needs to be quoted
+    force_apt_get: yes
+    cache_valid_time: 86400 #One day
+
+- name: Install required packages
+  apt:
+    name: "{{ packages }}"
+    force_apt_get: yes
+    state: present
+  vars:
+    packages:
+      - apt-transport-https
+      - software-properties-common
+      - ca-certificates
+      - python3
+      - python3-pip
+      - awscli
+      - linux-aws
+      - curl
+      - jq
+      - librocksdb-dev
+      - libsnappy-dev
+      - zlib1g-dev
+      - libbz2-dev
+
+- name: copy journald config
+  copy:
+    src: journald.conf
+    dest: /etc/systemd/journald.conf
+
+- name: restart journald
+  systemd:
+    name: systemd-journald
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  changed_when: false
+
+- name: Install pip3 packages
+  pip:
+    name: "{{ pippkgs }}"
+    executable: pip3
+    state: present
+  vars:
+    pippkgs:
+      - pip
+      - docker

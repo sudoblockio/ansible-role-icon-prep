@@ -1,7 +1,7 @@
 ansible-icon-prep
 =========
 
-Role to install prerequisites for running a P-Rep node on the ICON Blockchain.
+Role to install prerequisites for running a P-Rep 2.0 node on the ICON Blockchain.
 
 Requirements
 ------------

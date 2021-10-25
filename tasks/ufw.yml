@@ -1,0 +1,59 @@
+---
+
+- name: install ufw
+  apt:
+    name: ufw
+    state: present
+    update_cache: yes
+
+- name: ufw already enabled
+  command: ufw status verbose
+  register: ufw_status_result
+  changed_when: False
+
+- name: open ssh port
+  command: ufw allow 22/tcp
+  when: not ufw_status_result.stdout is search("22/tcp.*ALLOW IN.*Anywhere")
+
+- name: open p2p port
+  command: ufw allow 8080/tcp
+  when:
+   - not ufw_status_result.stdout is search("8080/tcp.*ALLOW IN.*Anywhere")
+   - not node_type == 'citizen'
+
+- name: open rpc port
+  command: ufw allow 9080/tcp
+  when: not ufw_status_result.stdout is search("9080/tcp.*ALLOW IN.*Anywhere")
+
+#
+# Exporters
+#
+# node
+- name: open node_exporter port
+  command: ufw allow 9100/tcp
+  when:
+    - node_exporter_enabled|default(false)|bool
+    - not ufw_status_result.stdout is search("9100/tcp.*ALLOW IN.*Anywhere")
+
+# nginx - rpc
+- name: open nginx_exporter rpc port
+  command: ufw allow 9113/tcp
+  when:
+    - nginx_exporter_enabled|default(false)|bool
+    - not ufw_status_result.stdout is search("9113/tcp.*ALLOW IN.*Anywhere")
+    - reverse_proxy_type == 'nginx'
+
+# cadvisor
+- name: open cadvisor port
+  command: ufw allow 9115/tcp
+  when:
+    - blackbox_exporter_enabled|default(false)|bool
+    - not ufw_status_result.stdout is search("9115/tcp.*ALLOW IN.*Anywhere")
+
+- name: enable firewall
+  shell: |
+    set -o pipefail
+    echo "y" | ufw enable
+  args:
+    executable: /bin/bash
+  when: not ufw_status_result.stdout is search("Status.* active")

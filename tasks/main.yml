@@ -1,89 +1,33 @@
 ---
 
-- name: Include debian installs
-  include_tasks: debian.yml
-  when: ansible_os_family == 'Debian'
+- name: Installations
+  include_tasks: setup.yml
+
+- name: Goloop
+  include_tasks: goloop.yml
+
+- name: UFW rules
+  include_tasks: ufw.yml
+
+- name: Include nginx conf files
+  include_tasks: nginx.yml
+
+- name: Application
+  include_tasks: app.yml
 
 - name: Configure cron jobs
   include_tasks: cron.yml
   when: cron_updater | bool
 
-- name: Install pip3 packages
-  pip:
-    name: "{{ pippkgs }}"
-    executable: pip3
-    state: present
-  vars:
-    pippkgs:
-      - pip
-      - docker
-
-- name: Create data directory
-  file:
-    path: "/home/{{ admin_user }}/data"
-    mode: '0755'
-    state: directory
-    owner: "{{ admin_user }}"
-    group: "{{ admin_group }}"
-
-- name: Create cert directory
-  file:
-    path: /home/{{ admin_user }}/cert
-    mode: '0600'
-    state: directory
-    owner: "{{ admin_user }}"
-    group: "{{ admin_group }}"
-
-- name: Copy over the keystore
-  copy:
-    src: "{{ keystore_path }}"
-    dest: "/home/{{ admin_user }}/cert/{{ keystore_path | basename }}"
-    mode: '0644'
-    owner: "{{ admin_user }}"
-    group: "{{ admin_group }}"
-  when:
-    - keystore_path is defined
-    - not node_type == 'citizen'
-
 #
-# Docker Configs
+# Start application
 #
-- name: Copy the docker-compose file
-  copy:
-    src: docker-compose.yml
-    dest: /home/{{ admin_user }}/docker-compose.yml
-    mode: '0644'
-    owner: "{{ admin_user }}"
-    group: "{{ admin_group }}"
-
-- name: Render env file
-  template:
-    src: "{{ role_path }}/templates/.env.j2"
-    dest: /home/{{ admin_user }}/.env
-    mode: '0644'
-    owner: "{{ admin_user }}"
-    group: "{{ admin_group }}"
-
+#- name: Start node application via docker-compose
+#  args:
+#    chdir: "/home/{{ admin_user }}"
+#  shell: docker-compose -f docker-compose.yml up -d
 #
-# Nginx
-#
-- name: Include nginx conf files
-  include_tasks: nginx.yml
-  when: reverse_proxy_type == 'nginx'
-
-- name: Configure exporters
-  include_tasks: exporters.yml
-  when: prometheus_enable | bool
-
-- name: reset ssh connection to allow user changes to affect 'current login user'
-  meta: reset_connection
-
-- name: Start node application via docker-compose
-  args:
-    chdir: "/home/{{ admin_user }}"
-  shell: docker-compose -f docker-compose.yml up -d
-
-- name: Wait for port 9000 to become open on the host, don't start checking for 10 seconds
-  wait_for:
-    port: 9000
-    delay: 10
+#- name: Wait for port 9080 to become open on the host, don't start checking for 10 seconds
+#  wait_for:
+#    port: 9080
+#    delay: 10

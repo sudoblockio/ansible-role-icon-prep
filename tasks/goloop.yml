@@ -1,0 +1,33 @@
+---
+
+#- name: Add go bin to path
+#  shell: echo $PATH
+#  environment:
+#    PATH: "/usr/local/go/bin/go:{{ ansible_env.PATH }}"
+
+- name: Copy go binary to path
+  copy:
+    src: /usr/local/go/bin/go
+    dest: /usr/local/bin/go
+
+- name: Changing perm of go
+  file:
+    dest: /usr/local/bin/go
+    mode: a+x
+
+- name: Git checkout goloop
+  ansible.builtin.git:
+    repo: 'https://github.com/icon-project/goloop'
+    dest: "{{ goloop_location }}"
+    version: "{{ goloop_version }}"
+
+- name: Build the default goloop target
+  make:
+    chdir: "{{ goloop_location }}"
+#  become: true
+
+- name: Copy goloop binary to path
+  copy:
+    remote_src: True
+    src: "{{ goloop_location }}/bin/goloop"
+    dest: /usr/local/bin/goloop

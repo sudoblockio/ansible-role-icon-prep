@@ -4,6 +4,7 @@
   file:
     path: /home/{{ admin_user }}/nginx
     state: directory
+    mode: '0755'
     owner: "{{ admin_user }}"
     group: "{{ admin_group }}"
 
@@ -11,22 +12,33 @@
   file:
     path: /home/{{ admin_user }}/data/log
     state: directory
+    mode: '0755'
     owner: "{{ admin_user }}"
     group: "{{ admin_group }}"
 
-- name: Render nginx.conf
-  template:
-    src: "{{ role_path }}/templates/nginx.conf.block42.j2"
+#- name: Render nginx.conf
+#  template:
+#    src: "{{ role_path }}/templates/nginx.conf.block42.j2"
+#    dest: /home/{{ admin_user }}/nginx/nginx.conf
+#    mode: '0644'
+#    owner: "{{ admin_user }}"
+#    group: "{{ admin_group }}"
+#  tags: update-configs
+
+- name: Copy nginx.conf
+  copy:
+    src: "{{ role_path }}/files/nginx/nginx.conf"
     dest: /home/{{ admin_user }}/nginx/nginx.conf
     mode: '0644'
     owner: "{{ admin_user }}"
     group: "{{ admin_group }}"
-  when: nginx_type == 'block42'
   tags: update-configs
 
-- name: Copy over nginx whitelist
-  synchronize:
-    src: "{{ role_path }}/files/nginx/access_lists"
-    dest: "/home/{{ admin_user }}/nginx"
-  when: nginx_type == 'block42'
-  tags: update-configs
+#- name: Copy over nginx whitelist
+#  synchronize:
+#    src: "{{ role_path }}/files/nginx/access_lists"
+#    dest: "/home/{{ admin_user }}/nginx"
+#  tags: update-configs
+
+- name: reset ssh connection to allow user changes to affect 'current login user'
+  meta: reset_connection
