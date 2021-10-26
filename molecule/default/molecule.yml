@@ -3,8 +3,6 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
 platforms:
 
   - name: instance
@@ -36,5 +34,8 @@ provisioner:
         keystore_password: "testing1."
 verifier:
   name: testinfra
-  lint:
-    name: flake8
+  lint: |
+    set -e
+    yamllint .
+    ansible-lint
+    flake8

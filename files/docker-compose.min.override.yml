@@ -45,4 +45,3 @@ services:
 
   cadvisor:
     <<: *disabled-service
-
