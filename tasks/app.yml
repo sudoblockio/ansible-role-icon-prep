@@ -4,15 +4,14 @@
 #
 - name: Create data / mainnet directory
   file:
-    path: "/home/{{ admin_user }}/{{ dirs }}"
+    path: "/home/{{ admin_user }}/{{ item }}"
     mode: '0755'
     state: directory
     owner: "{{ admin_user }}"
     group: "{{ admin_group }}"
-  vars:
-    dirs:
-      - data
-      - mainnet
+  loop:
+    - data
+    - mainnet
 
 - name: Create config directory
   file:
