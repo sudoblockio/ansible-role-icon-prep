@@ -38,7 +38,7 @@
 #
 - name: Copy the docker-compose file
   copy:
-    src: docker-compose.yml
+    src: docker-compose.yaml
     dest: /home/{{ admin_user }}/docker-compose.yaml
     mode: '0644'
     owner: "{{ admin_user }}"
