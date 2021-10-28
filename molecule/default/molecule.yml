@@ -29,7 +29,6 @@ provisioner:
   inventory:
     host_vars:
       instance:
-        network_name: "testnet"
         keystore_path: "{{ playbook_dir }}/../fixtures/keystore"
         keystore_password: "testing1."
 verifier:
