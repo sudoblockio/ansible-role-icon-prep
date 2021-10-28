@@ -4,36 +4,32 @@ admin_user: ubuntu
 admin_group: ubuntu
 
 network_name: "mainnet"
-node_type: prep
+#node_type: prep
 
 reverse_proxy_type: nginx
 nginx_type: block42
 
 keystore_password: ""
 keystore_path: ""
+mig_endpoint: ""
 
 #sync_db: true
 switch_ip_internally: false
 endpoint_url: # blank for default url
 
 enable_update_cron: true
+role_number: 3
 
 docker_tag_map:
-  mainnet: "iconloop/goloop-icon:latest"
-  zicon: "iconloop/goloop-icon:latest"
-  bicon: "iconloop/goloop-icon:latest"
-  testnet: "iconloop/goloop-icon:latest"
-  sejong: "iconloop/goloop-icon:latest"
+  MainNet: "iconloop/icon2-node:latest"
+  Sejong: "iconloop/icon2-node:latest"
+#  zicon: "iconloop/icon2-node:latest"
+#  bicon: "iconloop/icon2-node:latest"
+#  testnet: "iconloop/icon2-node:latest"
 docker_tag: "{{ docker_tag_map[network_name] }}"
 
-fastest_start: "yes"
+fastest_start: "true"
 
-#data_dir_map:
-#  mainnet: "mainnet"
-#  zicon: "PREP-TestNet"
-#  bicon: ""
-#  testnet: ""
-#data_dir: "{{ data_dir_map[network_name] }}"
 
 network_env_map:
   mainnet: "mainnet"
@@ -59,4 +55,4 @@ cadvisor_port: 8080
 cron_updater: false
 
 goloop_version: v1.0.2
-goloop_location: "/home/{{admin_user}}/goloop"
+goloop_location: "/home/{{ admin_user }}/goloop"

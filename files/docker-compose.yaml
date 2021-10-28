@@ -17,25 +17,22 @@ services:
     restart: always
 
   prep:
-#    ports:
-#      - "9080:9080"
-#      - "8080:8080"
     expose:
       - "9080"
       - "8080"
 
-    image: ${PREP_DOCKER_TAG:-iconloop/goloop-icon:latest}
+    image: ${PREP_DOCKER_TAG:-iconloop/icon2-node:latest}
 
-    container_name: prep-${NETWORK_NAME}
-#    environment:
-#
-#      GOLOOP_CONFIG: ""
-#      GOLOOP_KEY_STORE: ""
-#      GOLOOP_NODE_DIR: ""
-#      GOLOOP_NODE_SOCK: ""
-#
-#      KEY_STORE: ${KEY_STORE}
-#      KEY_SECRET: ${KEY_SECRET}
+    container_name: prep
+    environment:
+
+      SERVICE: "${SERVICE:-MainNet}" # MainNet, SeJong
+      GOLOOP_LOG_LEVEL: "debug" # trace, debug, info, warn, error, fatal, panic
+      KEY_STORE_FILENAME: "${KEY_STORE_FILENAME:-keystore}" # e.g. keystore.json with file at config/keystore.json
+      KEY_PASSWORD: "${KEY_PASSWORD}"
+      FASTEST_START: "true"
+      MIG_ENDPOINT: "${MIG_ENDPOINT}"
+      ROLE: 3  # preps = 3, citizen = 0
 
     cap_add:
       - SYS_TIME

@@ -31,7 +31,7 @@
     group: "{{ admin_group }}"
   when:
     - keystore_path is defined
-    - not node_type == 'citizen'
+    - role_number == 3  # prep
 
 #
 # Docker configs

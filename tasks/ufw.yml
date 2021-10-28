@@ -19,7 +19,7 @@
   command: ufw allow 8080/tcp
   when:
    - not ufw_status_result.stdout is search("8080/tcp.*ALLOW IN.*Anywhere")
-   - not node_type == 'citizen'
+   - role_number == 3  # prep
 
 - name: open rpc port
   command: ufw allow 9080/tcp
