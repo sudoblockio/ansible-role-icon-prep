@@ -38,7 +38,7 @@ services:
       - SYS_TIME
     volumes:
       - ./data:/goloop/data
-      - ./mainnet:/mainnet
+      - ./logs:/goloop/logs
       - ./config:/goloop/config
     restart: on-failure
 

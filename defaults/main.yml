@@ -39,6 +39,9 @@ nginx_exporter_enabled: true
 blackbox_exporter_enabled: true
 cadvisor_enabled: true
 
+rpc_port: 9000
+p2p_port: 7100
+
 node_exporter_port: 9100
 nginx_exporter_port: 9113
 blackbox_exporter_port: 9115

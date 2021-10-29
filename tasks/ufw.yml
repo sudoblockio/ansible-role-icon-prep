@@ -16,13 +16,13 @@
   when: not ufw_status_result.stdout is search("22/tcp.*ALLOW IN.*Anywhere")
 
 - name: open p2p port
-  command: ufw allow 8080/tcp
+  command: ufw allow {{ p2p_port }}/tcp
   when:
    - not ufw_status_result.stdout is search("8080/tcp.*ALLOW IN.*Anywhere")
    - role_number == 3  # prep
 
 - name: open rpc port
-  command: ufw allow 9080/tcp
+  command: ufw allow {{ rpc_port }}/tcp
   when: not ufw_status_result.stdout is search("9080/tcp.*ALLOW IN.*Anywhere")
 
 #
