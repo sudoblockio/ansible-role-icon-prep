@@ -26,7 +26,7 @@
 #  tags: update-configs
 
 - name: Copy nginx.conf
-  copy:
+  template:
     src: "{{ role_path }}/files/nginx/nginx.conf"
     dest: /home/{{ admin_user }}/nginx/nginx.conf
     mode: '0644'
