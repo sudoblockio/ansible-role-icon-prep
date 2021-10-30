@@ -27,7 +27,7 @@
 
 - name: Copy nginx.conf
   template:
-    src: "{{ role_path }}/files/nginx/nginx.conf"
+    src: "{{ role_path }}/templates/nginx/nginx.conf"
     dest: /home/{{ admin_user }}/nginx/nginx.conf
     mode: '0644'
     owner: "{{ admin_user }}"
