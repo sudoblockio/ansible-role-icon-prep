@@ -7,11 +7,9 @@ service: MainNet
 #node_type: prep
 
 reverse_proxy_type: nginx
-nginx_type: block42
 
 keystore_password: ""
 keystore_path: ""
-mig_endpoint: ""
 
 #sync_db: true
 switch_ip_internally: false

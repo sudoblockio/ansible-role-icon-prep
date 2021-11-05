@@ -16,15 +16,6 @@
     owner: "{{ admin_user }}"
     group: "{{ admin_group }}"
 
-#- name: Render nginx.conf
-#  template:
-#    src: "{{ role_path }}/templates/nginx.conf.block42.j2"
-#    dest: /home/{{ admin_user }}/nginx/nginx.conf
-#    mode: '0644'
-#    owner: "{{ admin_user }}"
-#    group: "{{ admin_group }}"
-#  tags: update-configs
-
 - name: Copy nginx.conf
   template:
     src: "{{ role_path }}/templates/nginx.conf"

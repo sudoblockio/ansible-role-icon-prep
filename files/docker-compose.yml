@@ -21,9 +21,7 @@ services:
       KEY_STORE_FILENAME: "${KEY_STORE_FILENAME:-keystore}" # e.g. keystore.json with file at config/keystore.json
       KEY_PASSWORD: "${KEY_PASSWORD}"
       FASTEST_START: "true"
-      MIG_ENDPOINT: "${MIG_ENDPOINT}"
       ROLE: 3  # preps = 3, citizen = 0
-
 
   node-exporter:
     image: bitnami/node-exporter:latest
