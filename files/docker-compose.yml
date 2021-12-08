@@ -40,18 +40,6 @@ services:
     depends_on:
       - prep
 
-  nginx-exporter-rpc:
-    image: bitnami/nginx-exporter:latest
-    ports:
-      - 9113:9113
-    restart: always
-    depends_on:
-      - prep
-    entrypoint:
-      - /usr/bin/exporter
-      - -nginx.scrape-uri
-      - http://nginx:9080/metrics
-
   cadvisor:
     image: google/cadvisor:latest
     privileged: true
