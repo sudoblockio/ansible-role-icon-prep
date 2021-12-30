@@ -17,9 +17,7 @@
 
 - name: open p2p port
   command: ufw allow {{ p2p_port }}/tcp
-  when:
-    - not ufw_status_result.stdout is search("{{ p2p_port }}/tcp.*ALLOW IN.*Anywhere")
-    - role_number == 3  # prep
+  when: not ufw_status_result.stdout is search("{{ p2p_port }}/tcp.*ALLOW IN.*Anywhere")
 
 - name: open rpc port
   command: ufw allow {{ rpc_port }}/tcp
