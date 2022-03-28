@@ -5,7 +5,7 @@
 
 - name: Goloop
   include_tasks: goloop.yml
-  when: install_goloop | bool 
+  when: goloop_install | bool 
 
 - name: UFW rules
   include_tasks: ufw.yml
