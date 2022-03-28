@@ -47,5 +47,6 @@ cadvisor_port: 8080
 
 cron_updater: false
 
+goloop_install: false
 goloop_version: v1.0.2
 goloop_location: "/home/{{ admin_user }}/goloop"
